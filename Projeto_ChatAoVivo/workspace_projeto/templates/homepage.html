@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HashZapp</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js" integrity="sha512-zoJXRvW2gC8Z0Xo3lBbao5+AS3g6YWr5ztKqaicua11xHo+AvE1b0lT9ODgrHTmNUxeCw0Ry4BGRYZfXu70weg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> <!--SocketIO-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> <!--Jquery-->
+</head>
+
+<body>
+    <header>
+    <h1 style= "background-color: #00A884; color: #FFFFFF; font-size: 50px;">HashZapp</h1>
+    </header>
+
+    <div id = "lista_de_mensagens">
+        <p></p>
+    </div>
+
+    <input type="text" id = "usuario" placeholder="Usuário" required>
+    <input type="text" id = "mensagem" placeholder="Mensagem" required> 
+
+    <button id = "botao" style = "background-color: #00A884; color: #FFFFFF">Enviar</button>
+
+    <footer>
+        <p>Esse site foi desenvolvido na aula da <a style = "color: #9B1A66;" href="https://www.hashtagtreinamentos.com/">Hashtag Treinamentos.</a></p>
+        <a href="https://www.hashtagtreinamentos.com/"><img src="https://www.hashtagtreinamentos.com/wp-content/uploads/2022/05/Logo-Hashtag-Original-100x45px.png.webp"></a>
+    </footer>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            
+            var socket = io("localhost:5000");
+            socket.on("connect", function(){
+                console.log("usuario conectou")
+            });
+
+            socket.on("message", function(data){
+                console.log("disparou uma messagem");
+                $("#lista_de_mensagens").append($("<p>").text(data));
+            });
+
+
+            $("#botao").on("click",function(){
+                console.log("clicou no botão");
+                socket.send($("#usuario").val() + ": " + $("#mensagem").val());
+                $("#mensagem").val("");
+            })
+
+        })
+    </script>
+    
+</body>
+
+</html>
